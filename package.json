@@ -1,0 +1,24 @@
+{
+  "name": "mock-hapi-server",
+  "version": "1.0.0",
+  "description": "用于提供模拟数据的后台服务",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZjpNode/mock-hapi-server.git"
+  },
+  "author": "zjp",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ZjpNode/mock-hapi-server/issues"
+  },
+  "homepage": "https://github.com/ZjpNode/mock-hapi-server#readme",
+  "dependencies": {
+    "hapi": "^17.3.1",
+    "hapi-pino": "^4.0.4"
+  }
+}
