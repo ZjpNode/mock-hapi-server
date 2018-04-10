@@ -1,52 +1,41 @@
-'use strict';
+"use strict";
 
-const Hapi = require('hapi');
+const routeList = require("./route");
+const Hapi = require("hapi");
 
 const server = Hapi.server({
-    port: 3000,
-    host: 'localhost'
+  port: 3000,
+  host: "localhost"
 });
 
-server.route({
-    method: 'GET',
-    path: '/',
-    handler: (request, h) => {
-
-        return 'Hello, world!';
+server.route(
+  routeList.concat([
+    {
+      method: "GET",
+      path: "/",
+      handler: (request, h) => {
+        return "Hello, world!";
+      }
     }
-});
-
-server.route({
-    method: 'GET',
-    path: '/{name}',
-    handler: (request, h) => {
-
-        // request.log(['a', 'name'], "Request name");
-        // or
-        request.logger.info('In handler %s', request.path);
-
-        return {name:`${encodeURIComponent(request.params.name)}`};
-    }
-});
+  ])
+);
 
 const init = async () => {
+  await server.register({
+    plugin: require("hapi-pino"),
+    options: {
+      prettyPrint: false,
+      logEvents: ["response"]
+    }
+  });
 
-    await server.register({
-        plugin: require('hapi-pino'),
-        options: {
-            prettyPrint: false,
-            logEvents: ['response']
-        }
-    });
-
-    await server.start();
-    console.log(`Server running at: ${server.info.uri}`);
+  await server.start();
+  console.log(`Server running at: ${server.info.uri}`);
 };
 
-process.on('unhandledRejection', (err) => {
-
-    console.log(err);
-    process.exit(1);
+process.on("unhandledRejection", err => {
+  console.log(err);
+  process.exit(1);
 });
 
 init();
