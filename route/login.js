@@ -2,7 +2,7 @@
  * @Author: jiapeng.Zheng 
  * @Date: 2018-04-11 09:23:50 
  * @Last Modified by: jiapeng.Zheng
- * @Last Modified time: 2018-04-11 17:38:07
+ * @Last Modified time: 2018-04-11 17:58:23
  * @description: 登入api
  */
 const path = require("path");
@@ -25,15 +25,16 @@ module.exports = {
     let username = request.payload.username;
     let password = request.payload.password;
     let msg = util.responseFormat(true, "登陆成功");
-    if (!USER[username]) {
-      msg = util.responseFormat(false, "用户不存在");
-    } else if (USER[username].password !== password) {
-      msg = util.responseFormat(false, "密码出错");
-    } else {
-      // console.log(request.auth.isAuthenticated);
-      const sid = String(++uuid);
-      await request.server.app.cache.set(sid, { account: USER[username] }, 0);
-      request.cookieAuth.set({ sid });
+    if (!request.auth.isAuthenticated) {
+      if (!USER[username]) {
+        msg = util.responseFormat(false, "用户不存在");
+      } else if (USER[username].password !== password) {
+        msg = util.responseFormat(false, "密码出错");
+      } else {
+        const sid = String(++uuid);
+        await request.server.app.cache.set(sid, { account: USER[username] }, 0);
+        request.cookieAuth.set({ sid });
+      }
     }
     return msg;
   },
