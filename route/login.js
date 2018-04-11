@@ -2,7 +2,7 @@
  * @Author: jiapeng.Zheng 
  * @Date: 2018-04-11 09:23:50 
  * @Last Modified by: jiapeng.Zheng
- * @Last Modified time: 2018-04-11 15:53:50
+ * @Last Modified time: 2018-04-11 17:38:07
  * @description: 登入api
  */
 const path = require("path");
@@ -14,6 +14,8 @@ const FIELD_MAPPING = {
   username: "用户名",
   password: "密码"
 };
+
+let uuid = 1; // Use seq instead of proper unique identifiers for demo only
 
 module.exports = {
   method: "POST",
@@ -29,8 +31,9 @@ module.exports = {
       msg = util.responseFormat(false, "密码出错");
     } else {
       // console.log(request.auth.isAuthenticated);
-      await request.server.app.cache.set('sidsid', { account:USER[username] }, 0);
-      request.cookieAuth.set({ sid:'sidsid' });
+      const sid = String(++uuid);
+      await request.server.app.cache.set(sid, { account: USER[username] }, 0);
+      request.cookieAuth.set({ sid });
     }
     return msg;
   },
